@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <title>Count</title>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>What am I saying?</h1>
+    </div>
+    <div class="content">
+        <table class="table">
+            <thead>
+            <tr>
+                <th><abbr title="Position">Pos</abbr></th>
+                <th>Keyword</th>
+                <th><abbr title="Count">Count</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for counter in counters %}
+            <tr>
+                <td> {{loop.index}}</td>
+                <td>{{ counter }}</td>
+                <td>{{ counters[counter] }}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

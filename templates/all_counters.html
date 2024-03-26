@@ -4,12 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
-    <title>Count</title>
+    <style>
+
+        .content, .header {
+        margin-top: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        }
+    </style>
+    <title>Leaderboard</title>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>What am I saying?</h1>
+        <h1 class="title is-1">What am I saying?</h1>
     </div>
     <div class="content">
         <table class="table">
@@ -31,8 +40,9 @@
             {% for counter in counters %}
             <tr>
                 <td> {{loop.index}}</td>
-                <td>{{ counter }}</td>
-                <td>{{ counters[counter] }}</td>
+                <td><a class="has-text-danger-light" href="/count/{{ counter['keyword'] }}">{{ counter['keyword'] }}</a>
+                </td>
+                <td>{{ counter['count'] }}</td>
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>

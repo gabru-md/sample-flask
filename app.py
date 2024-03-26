@@ -12,6 +12,8 @@ from pymongo.mongo_client import MongoClient
 from urllib.parse import quote_plus
 import os
 
+print(os.getenv('mongodb_username'), os.getenv('mongodb_password'), os.getenv('mongodb_cluster'))
+
 username = quote_plus(os.getenv('mongodb_username'))
 password = quote_plus(os.getenv('mongodb_password'))
 cluster = os.getenv('mongodb_cluster')

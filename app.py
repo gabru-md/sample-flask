@@ -105,7 +105,7 @@ def leaderboard_for_user(username):
     return render_template("count_per_user.html", key_checked=False)
 
 
-@app.route("/<username>/key_check", methods=['POST'])
+@app.route("/u/<username>/key_check", methods=['POST'])
 def leaderboard_key_check(username):
     saved_user = user_collection.find_one({"user": username})
     if not saved_user:

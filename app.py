@@ -28,6 +28,7 @@ try:
     db = client.get_database('counter')
     counter_collection = db.get_collection('counter')
     stats_collection = db.get_collection('stats')
+    user_collection = db.get_collection('user')
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
@@ -74,6 +75,71 @@ def count_increment(keyword):
 def all_counters():
     leaderboard = counter_collection.find().sort([('count', -1)]).limit(20)
     return render_template("all_counters.html", counters=leaderboard)
+
+
+# New Routes per user
+
+@app.route("/create_new_user/<username>", methods=['GET'])
+def create_new_user(username):
+    key = request.args.get('key')
+    if key == 'banger':
+        user_collection.insert_one({"user": username, "createdat": datetime.now()})
+        return f"User: {username} created!"
+    return "Oopsie! the request does not bang!"
+
+
+@app.route("/set_user_key/<username>/<key>", methods=['GET'])
+def set_user_key(username, key):
+    saved_user = user_collection.find_one({"user": username})
+    if not saved_user:
+        return "No saved user found"
+    user_collection.update_one({"user": username}, {"$set": {"key": key}})
+    return "User key set!"
+
+
+@app.route("/u/<username>", methods=['GET'])
+def leaderboard_for_user(username):
+    saved_user = user_collection.find_one({"user": username})
+    if not saved_user:
+        return "No saved user found"
+    return render_template("count_per_user.html", key_checked=False)
+
+
+@app.route("/<username>/key_check", methods=['POST'])
+def leaderboard_key_check(username):
+    saved_user = user_collection.find_one({"user": username})
+    if not saved_user:
+        return "No saved user found"
+    if saved_user['key'] == key:
+        leaderboard_for_user = counter_collection.find({"user": username}).sort([('count', -1)]).limit(20)
+        return render_template("count_per_user.html", key_checked=True, leaderboard=leaderboard_for_user)
+    return f"Key Mismatch for {username}, you naughty naughty!"
+
+
+def get_counter_value_for_user(keyword, username):
+    counter = counter_collection.find_one({"keyword": keyword, "user": username})
+    if counter:
+        return counter["count"]
+    else:
+        counter_collection.insert_one({"keyword": keyword, "count": 0})
+        return 0
+
+
+def increment_counter_for_user(keyword, username):
+    old_value = get_counter_value_for_user(keyword, username)
+    counter_collection.update_one({"keyword": keyword, "user": username}, {"$set": {"count": old_value + 1}})
+    return old_value + 1
+
+
+def add_stat_for_keyword_for_user(keyword, username):
+    stats_collection.insert_one({"keyword": keyword, "date": datetime.now(), "user": username})
+
+
+@app.route("/u/<username>/count/<keyword>", methods=["POST"])
+def count_increment(keyword):
+    increment_counter_for_user(keyword)
+    add_stat_for_keyword_for_user(keyword)
+    return redirect(url_for("count", keyword=keyword), code=302)
 
 
 if __name__ == '__main__':

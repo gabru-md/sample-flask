@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <style>
+
+        .content, .header {
+        margin-top: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        }
+    </style>
+    <title>Leaderboard</title>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1 class="title is-1">What am I saying?</h1>
+    </div>
+    <div class="content">
+        {% if key_checked == true %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th><abbr title="Position">Pos</abbr></th>
+                <th>Keyword</th>
+                <th><abbr title="Count">Count</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+                <th><abbr title="-">-</abbr></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for counter in counters %}
+            <tr>
+                <td> {{loop.index}}</td>
+                <td><a class="has-text-danger-light" href="/count/{{ counter['keyword'] }}">{{ counter['keyword'] }}</a>
+                </td>
+                <td>{{ counter['count'] }}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <form action="/{{ username }}/key_check" method="POST">
+            <div class="field">
+                <div class="control">
+                    <button type="submit" class="button is-primary is-outlined">Increment count for {{ keyword }}
+                    </button>
+                </div>
+                <div class="count-block">
+                    <input type="password" name="key" id="key"/>
+                </div>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>
